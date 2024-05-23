@@ -1,24 +1,19 @@
-library comfy_ui_client;
 
-import 'dart:convert';
+import'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
+import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
-
-import 'package:comfy_ui_client/model/types.dart';
-import 'package:dio/dio.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-class ComfyUiClient {
-  ComfyUiClient({required this.serverAddress, required this.clientId});
+import 'types.dart';
 
+class ComfyUIClient {
   final String serverAddress;
   final String clientId;
 
-  final dio = Dio();
   WebSocketChannel? _ws;
 
-  Stream? stream;
+  ComfyUIClient(this.serverAddress, this.clientId);
 
   Future<void> connect() async {
     if (_ws != null) {
@@ -30,9 +25,7 @@ class ComfyUiClient {
 
     _ws = WebSocketChannel.connect(Uri.parse(url));
 
-    stream = _ws?.stream.asBroadcastStream();
-
-    stream?.listen(
+    _ws?.stream.listen(
       (data) {
         if (data is List<int>) {
           print('Received binary data');
@@ -55,9 +48,8 @@ class ComfyUiClient {
   }
 
   Future<List<String>> getEmbeddings() async {
-    final res = await dio.getUri(Uri.parse('http://$serverAddress/embeddings'));
-
-    final json = res.data;
+    final res = await http.get(Uri.parse('http://$serverAddress/embeddings'));
+    final json = jsonDecode(res.body);
 
     if (json is Map && json.containsKey('error')) {
       throw Exception(jsonEncode(json));
@@ -67,8 +59,8 @@ class ComfyUiClient {
   }
 
   Future<List<String>> getExtensions() async {
-    final res = await dio.getUri(Uri.parse('http://$serverAddress/extensions'));
-    final json = res.data;
+    final res = await http.get(Uri.parse('http://$serverAddress/extensions'));
+    final json = jsonDecode(res.body);
 
     if (json is Map && json.containsKey('error')) {
       throw Exception(jsonEncode(json));
@@ -78,15 +70,15 @@ class ComfyUiClient {
   }
 
   Future<QueuePromptResult> queuePrompt(Prompt prompt) async {
-    final res = await dio.postUri(
+    final res = await http.post(
       Uri.parse('http://$serverAddress/prompt'),
-      options: Options(headers: {'Content-Type': 'application/json'}),
-      data: {
-        'prompt': prompt.inputs,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'prompt': prompt.toJson(),
         'client_id': clientId,
-      },
+      }),
     );
-    final json = res.data;
+    final json = jsonDecode(res.body);
 
     if (json is Map && json.containsKey('error')) {
       throw Exception(jsonEncode(json));
@@ -96,11 +88,11 @@ class ComfyUiClient {
   }
 
   Future<void> interrupt() async {
-    final res = await dio.postUri(
+    final res = await http.post(
       Uri.parse('http://$serverAddress/interrupt'),
-      options: Options(headers: {'Content-Type': 'application/json'}),
+      headers: {'Content-Type': 'application/json'},
     );
-    final json = res.data;
+    final json = jsonDecode(res.body);
 
     if (json is Map && json.containsKey('error')) {
       throw Exception(jsonEncode(json));
@@ -108,12 +100,12 @@ class ComfyUiClient {
   }
 
   Future<void> editHistory(EditHistoryRequest params) async {
-    final res = await dio.postUri(
+    final res = await http.post(
       Uri.parse('http://$serverAddress/history'),
-      options: Options(headers: {'Content-Type': 'application/json'}),
-      data: params.toJson(),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(params.toJson()),
     );
-    final json = res.data;
+    final json = jsonDecode(res.body);
 
     if (json is Map && json.containsKey('error')) {
       throw Exception(jsonEncode(json));
@@ -126,16 +118,17 @@ class ComfyUiClient {
     bool? overwrite,
   }) async {
     final formData = {
-      'image': MultipartFile.fromBytes(image, filename: filename),
+      'image': MultipartFile.fromBytes('image', image, filename: filename),
       if (overwrite != null) 'overwrite': overwrite.toString(),
     };
 
-    final res = await dio.postUri(
+    final res = await http.MultipartRequest(
+      'POST',
       Uri.parse('http://$serverAddress/upload/image'),
-      data: formData,
-    );
+    )..files.addAll(formData.values)
+      ..send();
 
-    final json = res.data;
+    final json = jsonDecode(await res.stream.bytesToString());
 
     if (json is Map && json.containsKey('error')) {
       throw Exception(jsonEncode(json));
@@ -151,17 +144,18 @@ class ComfyUiClient {
     bool? overwrite,
   }) async {
     final formData = {
-      'image': MultipartFile.fromBytes(image, filename: filename),
+      'image': MultipartFile.fromBytes('image', image, filename: filename),
       'originalRef': jsonEncode(originalRef.toJson()),
       if (overwrite != null) 'overwrite': overwrite.toString(),
     };
 
-    final res = await dio.postUri(
+    final res = await http.MultipartRequest(
+      'POST',
       Uri.parse('http://$serverAddress/upload/mask'),
-      data: formData,
-    );
+    )..fields.addAll(formData)
+      ..send();
 
-    final json = res.data;
+    final json = jsonDecode(await res.stream.bytesToString());
 
     if (json is Map && json.containsKey('error')) {
       throw Exception(jsonEncode(json));
@@ -175,24 +169,21 @@ class ComfyUiClient {
     String subfolder,
     String type,
   ) async {
-    final res = await dio.getUri(
-      Uri.parse(
-        'http://$serverAddress/view?filename=$filename&subfolder=$subfolder&type=$type',
-      ),
-      options: Options(responseType: ResponseType.bytes),
-    );
+    final res = await http.get(Uri.parse(
+      'http://$serverAddress/view?filename=$filename&subfolder=$subfolder&type=$type',
+    ));
 
-    return res.data;
+    return res.bodyBytes;
   }
 
   Future<ViewMetadataResponse> viewMetadata(
     FolderName folderName,
     String filename,
   ) async {
-    final res = await dio.getUri(Uri.parse(
+    final res = await http.get(Uri.parse(
       'http://$serverAddress/view_metadata/${folderName.name}?filename=$filename',
     ));
-    final json = res.data;
+    final json = jsonDecode(res.body);
 
     if (json is Map && json.containsKey('error')) {
       throw Exception(jsonEncode(json));
@@ -202,9 +193,8 @@ class ComfyUiClient {
   }
 
   Future<SystemStatsResponse> getSystemStats() async {
-    final res =
-        await dio.getUri(Uri.parse('http://$serverAddress/system_stats'));
-    final json = res.data;
+    final res = await http.get(Uri.parse('http://$serverAddress/system_stats'));
+    final json = jsonDecode(res.body);
 
     if (json is Map && json.containsKey('error')) {
       throw Exception(jsonEncode(json));
@@ -214,8 +204,8 @@ class ComfyUiClient {
   }
 
   Future<PromptQueueResponse> getPrompt() async {
-    final res = await dio.getUri(Uri.parse('http://$serverAddress/prompt'));
-    final json = res.data;
+    final res = await http.get(Uri.parse('http://$serverAddress/prompt'));
+    final json = jsonDecode(res.body);
 
     if (json is Map && json.containsKey('error')) {
       throw Exception(jsonEncode(json));
@@ -225,10 +215,10 @@ class ComfyUiClient {
   }
 
   Future<ObjectInfoResponse> getObjectInfo([String? nodeClass]) async {
-    final res = await dio.getUri(Uri.parse(
+    final res = await http.get(Uri.parse(
       'http://$serverAddress/object_info${nodeClass != null ? '/$nodeClass' : ''}',
     ));
-    final json = res.data;
+    final json = jsonDecode(res.body);
 
     if (json is Map && json.containsKey('error')) {
       throw Exception(jsonEncode(json));
@@ -238,10 +228,10 @@ class ComfyUiClient {
   }
 
   Future<HistoryResult> getHistory([String? promptId]) async {
-    final res = await dio.getUri(Uri.parse(
+    final res = await http.get(Uri.parse(
       'http://$serverAddress/history${promptId != null ? '/$promptId' : ''}',
     ));
-    final json = res.data;
+    final json = jsonDecode(res.body);
 
     if (json is Map && json.containsKey('error')) {
       throw Exception(jsonEncode(json));
@@ -251,8 +241,8 @@ class ComfyUiClient {
   }
 
   Future<QueueResponse> getQueue() async {
-    final res = await dio.getUri(Uri.parse('http://$serverAddress/queue'));
-    final json = res.data;
+    final res = await http.get(Uri.parse('http://$serverAddress/queue'));
+    final json = jsonDecode(res.body);
 
     if (json is Map && json.containsKey('error')) {
       throw Exception(jsonEncode(json));
@@ -265,9 +255,9 @@ class ComfyUiClient {
     ImagesResponse response,
     String outputDir,
   ) async {
-    for (final nodeId in response.images.keys) {
-      for (final img in response.images[nodeId]!) {
-        final arrayBuffer = img.blob;
+    for (final nodeId in response.keys) {
+      for (final img in response[nodeId]!) {
+        final arrayBuffer = await img.blob.bytesToUint8List();
         final outputPath = path.join(outputDir, img.image.filename);
         await File(outputPath).writeAsBytes(arrayBuffer);
       }
@@ -286,7 +276,7 @@ class ComfyUiClient {
 
     final outputImages = <String, List<ImageContainer>>{};
 
-    await for (final data in stream!) {
+    await for (final data in _ws!.stream) {
       if (data is String) {
         final message = jsonDecode(data);
         if (message['type'] == 'executing') {
@@ -298,17 +288,13 @@ class ComfyUiClient {
 
             if (messageData['prompt_id'] == promptId) {
               final historyRes = await getHistory(promptId);
-              final history = historyRes.history[promptId];
+              final history = historyRes.history;
 
-              for (final nodeId in history!.outputs.keys) {
+              for (final nodeId in history.outputs.keys) {
                 final nodeOutput = history.outputs[nodeId];
-                if (nodeOutput['images'] != null) {
-                  final images = (nodeOutput['images'] as List)
-                      .map((e) => OutputImage.fromJson(e))
-                      .toList();
-
+                if (nodeOutput?.images != null) {
                   final imagesOutput = <ImageContainer>[];
-                  for (final image in images) {
+                  for (final image in nodeOutput!.images!) {
                     final blob = await getImage(
                       image.filename,
                       image.subfolder,
@@ -327,7 +313,7 @@ class ComfyUiClient {
               }
 
               _ws?.sink.close();
-              return ImagesResponse(images: outputImages);
+              return outputImages;
             }
           }
         }
@@ -337,3 +323,4 @@ class ComfyUiClient {
     throw Exception('Unexpected response from server');
   }
 }
+

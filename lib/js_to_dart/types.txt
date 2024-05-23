@@ -1,0 +1,199 @@
+class NodeInfo {
+  String classType;
+  Map<String, dynamic> inputs;
+
+  NodeInfo({required this.classType, required this.inputs});
+}
+
+class Prompt {
+  Map<String, dynamic> inputs;
+  String classType;
+
+  Prompt({required this.inputs, required this.classType});
+}
+
+class ComfyUIError {
+  String type;
+  String message;
+  String details;
+  dynamic extraInfo;
+
+  ComfyUIError({required this.type, required this.message, required this.details, this.extraInfo});
+}
+
+class QueuePromptResult {
+  String promptId;
+  int number;
+  Map<String, ComfyUIError> nodeErrors;
+
+  QueuePromptResult({required this.promptId, required this.number, required this.nodeErrors});
+}
+
+class UploadImageResult {
+  String name;
+  String subfolder;
+  String type;
+
+  UploadImageResult({required this.name, required this.subfolder, required this.type});
+}
+
+class ImageRef {
+  String filename;
+  String? subfolder;
+  String? type;
+
+  ImageRef({required this.filename, this.subfolder, this.type});
+}
+
+class EditHistoryRequest {
+  bool? clear;
+  List<String>? delete;
+
+  EditHistoryRequest({this.clear, this.delete});
+}
+
+class PromptHistory {
+  List<dynamic> prompt;
+  Map<String, dynamic> outputs;
+
+  PromptHistory({required this.prompt, required this.outputs});
+}
+
+class HistoryResult {
+  Map<String, PromptHistory> history;
+
+  HistoryResult({required this.history});
+}
+
+class OutputImage {
+  String filename;
+  String subfolder;
+  String type;
+
+  OutputImage({required this.filename, required this.subfolder, required this.type});
+}
+
+class ImageContainer {
+  Blob blob;
+  OutputImage image;
+
+  ImageContainer({required this.blob, required this.image});
+}
+
+class ImagesResponse {
+  Map<String, List<ImageContainer>> images;
+
+  ImagesResponse({required this.images});
+}
+
+class DeviceStats {
+  String name;
+  String type;
+  int index;
+  int vramTotal;
+  int vramFree;
+  int torchVramTotal;
+  int torchVramFree;
+
+  DeviceStats({
+    required this.name,
+    required this.type,
+    required this.index,
+    required this.vramTotal,
+    required this.vramFree,
+    required this.torchVramTotal,
+    required this.torchVramFree,
+  });
+}
+
+class SystemStatsResponse {
+  List<DeviceStats> devices;
+
+  SystemStatsResponse({required this.devices});
+}
+
+class ViewMetadataResponse {
+  Map<String, dynamic> metadata;
+
+  ViewMetadataResponse({required this.metadata});
+}
+
+typedef QueueDataPrimitives = dynamic;
+typedef QueueData = List<QueueDataPrimitives>;
+
+class QueueResponse {
+  List<QueueData> queueRunning;
+  List<QueueData> queuePending;
+
+  QueueResponse({required this.queueRunning, required this.queuePending});
+}
+
+class ExecInfo {
+  int queueRemaining;
+
+  ExecInfo({required this.queueRemaining});
+}
+
+class PromptQueueResponse {
+  ExecInfo execInfo;
+
+  PromptQueueResponse({required this.execInfo});
+}
+
+class ObjectInfo {
+  Map<String, dynamic> input;
+  List<String> output;
+  List<bool> outputIsList;
+  List<String> outputName;
+  String name;
+  String displayName;
+  String description;
+  String category;
+  bool outputNode;
+
+  ObjectInfo({
+    required this.input,
+    required this.output,
+    required this.outputIsList,
+    required this.outputName,
+    required this.name,
+    required this.displayName,
+    required this.description,
+    required this.category,
+    required this.outputNode,
+  });
+}
+
+class ObjectInfoResponse {
+  Map<String, ObjectInfo> objectInfo;
+
+  ObjectInfoResponse({required this.objectInfo});
+}
+
+class ResponseError {
+  dynamic error;
+  Map<String, ComfyUIError> nodeErrors;
+
+  ResponseError({required this.error, required this.nodeErrors});
+}
+
+enum FolderName {
+  checkpoints,
+  configs,
+  loras,
+  vae,
+  clip,
+  unet,
+  clipVision,
+  styleModels,
+  embeddings,
+  diffusers,
+  vaeApprox,
+  controlnet,
+  gligen,
+  upscaleModels,
+  customNodes,
+  hypernetworks,
+}
+
+
