@@ -1,0 +1,1761 @@
+{
+  "3": {
+    "inputs": {
+      "seed": [
+        "497",
+        0
+      ],
+      "steps": 20,
+      "cfg": 6,
+      "sampler_name": "ddpm",
+      "scheduler": "normal",
+      "denoise": 1,
+      "model": [
+        "383",
+        0
+      ],
+      "positive": [
+        "17",
+        0
+      ],
+      "negative": [
+        "17",
+        1
+      ],
+      "latent_image": [
+        "30",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "4": {
+    "inputs": {
+      "ckpt_name": "epicphotogasm_z-inpainting.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "Load Checkpoint"
+    }
+  },
+  "6": {
+    "inputs": {
+      "text": "sparklystyle beautiful fashion (dress) with shining small detailing",
+      "clip": [
+        "382",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "7": {
+    "inputs": {
+      "text": "(floating hand, separate hand, bad anatomy, camera flare, skinny doll, thin waist, torn clothes, sloppy clothes, torn shirt, worn out clothes) (large breasts:0.2) worst quality, low quality, medium quality, bad anatomy, bad composition, ugly, abnormal, lowres, comic, bad anatomy, bad hands, text, error, missing fingers, jpeg artifacts, signature, watermark, username, blurry, less than 5 fingers, more than 5 fingers, bad hands, bad hand anatomy, missing fingers, extra fingers, mutated hands, disfigured hands, deformed hands, (double eyebrows:1.2), deformed lips, bad teeth, deformed teeth, (vagina, pussy)",
+      "clip": [
+        "382",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "8": {
+    "inputs": {
+      "samples": [
+        "3",
+        0
+      ],
+      "vae": [
+        "31",
+        0
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "10": {
+    "inputs": {
+      "detect_hand": "enable",
+      "detect_body": "enable",
+      "detect_face": "enable",
+      "resolution": 512,
+      "bbox_detector": "yolox_l.onnx",
+      "pose_estimator": "dw-ll_ucoco_384.onnx",
+      "image": [
+        "408",
+        0
+      ]
+    },
+    "class_type": "DWPreprocessor",
+    "_meta": {
+      "title": "DWPose Estimator"
+    }
+  },
+  "11": {
+    "inputs": {
+      "strength": 0.8,
+      "start_percent": 0,
+      "end_percent": 0.9,
+      "positive": [
+        "6",
+        0
+      ],
+      "negative": [
+        "7",
+        0
+      ],
+      "control_net": [
+        "12",
+        0
+      ],
+      "image": [
+        "10",
+        0
+      ]
+    },
+    "class_type": "ACN_AdvancedControlNetApply",
+    "_meta": {
+      "title": "OpenPose"
+    }
+  },
+  "12": {
+    "inputs": {
+      "control_net_name": "control_v11p_sd15_openpose.pth"
+    },
+    "class_type": "ControlNetLoader",
+    "_meta": {
+      "title": "Load ControlNet Model"
+    }
+  },
+  "15": {
+    "inputs": {
+      "control_net_name": "control_v11f1p_sd15_depth.pth"
+    },
+    "class_type": "ControlNetLoader",
+    "_meta": {
+      "title": "Load ControlNet Model"
+    }
+  },
+  "16": {
+    "inputs": {
+      "a": 6.283185307179586,
+      "bg_threshold": 0.1,
+      "resolution": 512,
+      "image": [
+        "408",
+        0
+      ]
+    },
+    "class_type": "MiDaS-DepthMapPreprocessor",
+    "_meta": {
+      "title": "MiDaS Depth Map"
+    }
+  },
+  "17": {
+    "inputs": {
+      "strength": 0.7000000000000001,
+      "start_percent": 0,
+      "end_percent": 0.2,
+      "positive": [
+        "11",
+        0
+      ],
+      "negative": [
+        "11",
+        1
+      ],
+      "control_net": [
+        "15",
+        0
+      ],
+      "image": [
+        "16",
+        0
+      ]
+    },
+    "class_type": "ACN_AdvancedControlNetApply",
+    "_meta": {
+      "title": "Depth"
+    }
+  },
+  "19": {
+    "inputs": {
+      "model_name": "sam_vit_b (375MB)"
+    },
+    "class_type": "SAMModelLoader (segment anything)",
+    "_meta": {
+      "title": "SAMModelLoader (segment anything)"
+    }
+  },
+  "20": {
+    "inputs": {
+      "model_name": "GroundingDINO_SwinT_OGC (694MB)"
+    },
+    "class_type": "GroundingDinoModelLoader (segment anything)",
+    "_meta": {
+      "title": "GroundingDinoModelLoader (segment anything)"
+    }
+  },
+  "25": {
+    "inputs": {
+      "expand": 60,
+      "incremental_expandrate": 0,
+      "tapered_corners": true,
+      "flip_input": false,
+      "blur_radius": 16,
+      "lerp_alpha": 1,
+      "decay_factor": 1,
+      "mask": [
+        "457",
+        0
+      ]
+    },
+    "class_type": "GrowMaskWithBlur",
+    "_meta": {
+      "title": "GrowMaskWithBlur"
+    }
+  },
+  "29": {
+    "inputs": {
+      "upscale_method": "nearest-exact",
+      "megapixels": 1,
+      "image": [
+        "408",
+        0
+      ]
+    },
+    "class_type": "ImageScaleToTotalPixels",
+    "_meta": {
+      "title": "ImageScaleToTotalPixels"
+    }
+  },
+  "30": {
+    "inputs": {
+      "grow_mask_by": 7,
+      "pixels": [
+        "227",
+        0
+      ],
+      "vae": [
+        "31",
+        0
+      ],
+      "mask": [
+        "310",
+        0
+      ]
+    },
+    "class_type": "VAEEncodeForInpaint",
+    "_meta": {
+      "title": "VAE Encode (for Inpainting)"
+    }
+  },
+  "31": {
+    "inputs": {
+      "vae_name": "vae-ft-mse-840000-ema-pruned.ckpt"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE"
+    }
+  },
+  "32": {
+    "inputs": {
+      "upscale_method": "nearest-exact",
+      "megapixels": [
+        "488",
+        0
+      ],
+      "image": [
+        "408",
+        0
+      ]
+    },
+    "class_type": "ImageScaleToTotalPixels",
+    "_meta": {
+      "title": "ImageScaleToTotalPixels"
+    }
+  },
+  "33": {
+    "inputs": {
+      "image": [
+        "32",
+        0
+      ]
+    },
+    "class_type": "Get image size",
+    "_meta": {
+      "title": "Get original size "
+    }
+  },
+  "34": {
+    "inputs": {
+      "mask": [
+        "25",
+        0
+      ]
+    },
+    "class_type": "MaskToImage",
+    "_meta": {
+      "title": "Convert Mask to Image"
+    }
+  },
+  "35": {
+    "inputs": {
+      "upscale_method": "nearest-exact",
+      "width": [
+        "33",
+        0
+      ],
+      "height": [
+        "33",
+        1
+      ],
+      "crop": "disabled",
+      "image": [
+        "34",
+        0
+      ]
+    },
+    "class_type": "ImageScale",
+    "_meta": {
+      "title": "Апскейл оригинальной маски в размер картинки"
+    }
+  },
+  "39": {
+    "inputs": {
+      "channel": "red",
+      "image": [
+        "35",
+        0
+      ]
+    },
+    "class_type": "ImageToMask",
+    "_meta": {
+      "title": "Convert Image to Mask"
+    }
+  },
+  "61": {
+    "inputs": {
+      "detection_hint": "diamond-4",
+      "dilation": -4,
+      "threshold": 0.1,
+      "bbox_expansion": 10,
+      "mask_hint_threshold": 0.7000000000000001,
+      "mask_hint_use_negative": "False",
+      "sam_model": [
+        "267",
+        0
+      ],
+      "segs": [
+        "62",
+        0
+      ],
+      "image": [
+        "29",
+        0
+      ]
+    },
+    "class_type": "SAMDetectorSegmented",
+    "_meta": {
+      "title": "SAMDetector (segmented)"
+    }
+  },
+  "62": {
+    "inputs": {
+      "threshold": 0.6,
+      "dilation": 10,
+      "crop_factor": 1,
+      "drop_size": 10,
+      "labels": "all",
+      "bbox_detector": [
+        "63",
+        0
+      ],
+      "image": [
+        "29",
+        0
+      ]
+    },
+    "class_type": "BboxDetectorSEGS",
+    "_meta": {
+      "title": "BBOX Detector (SEGS)"
+    }
+  },
+  "63": {
+    "inputs": {
+      "model_name": "bbox/face_yolov8m.pt"
+    },
+    "class_type": "UltralyticsDetectorProvider",
+    "_meta": {
+      "title": "UltralyticsDetectorProvider"
+    }
+  },
+  "66": {
+    "inputs": {
+      "expand": 6,
+      "incremental_expandrate": 0,
+      "tapered_corners": true,
+      "flip_input": false,
+      "blur_radius": 6,
+      "lerp_alpha": 1,
+      "decay_factor": 1,
+      "mask": [
+        "70",
+        0
+      ]
+    },
+    "class_type": "GrowMaskWithBlur",
+    "_meta": {
+      "title": "GrowMaskWithBlur"
+    }
+  },
+  "69": {
+    "inputs": {
+      "expand": 10,
+      "incremental_expandrate": 0,
+      "tapered_corners": true,
+      "flip_input": false,
+      "blur_radius": 6,
+      "lerp_alpha": 1,
+      "decay_factor": 1,
+      "mask": [
+        "66",
+        0
+      ]
+    },
+    "class_type": "GrowMaskWithBlur",
+    "_meta": {
+      "title": "GrowMaskWithBlur"
+    }
+  },
+  "70": {
+    "inputs": {
+      "masks": [
+        "61",
+        0
+      ]
+    },
+    "class_type": "Mask Fill Holes",
+    "_meta": {
+      "title": "Mask Fill Holes"
+    }
+  },
+  "73": {
+    "inputs": {
+      "threshold": 0.5,
+      "dilation": 0,
+      "crop_factor": 3,
+      "drop_size": 10,
+      "labels": "all",
+      "bbox_detector": [
+        "74",
+        0
+      ],
+      "image": [
+        "29",
+        0
+      ]
+    },
+    "class_type": "BboxDetectorSEGS",
+    "_meta": {
+      "title": "BBOX Detector (SEGS)"
+    }
+  },
+  "74": {
+    "inputs": {
+      "model_name": "bbox/hand_yolov8s.pt"
+    },
+    "class_type": "UltralyticsDetectorProvider",
+    "_meta": {
+      "title": "UltralyticsDetectorProvider"
+    }
+  },
+  "81": {
+    "inputs": {
+      "mask": [
+        "441",
+        0
+      ]
+    },
+    "class_type": "MaskToImage",
+    "_meta": {
+      "title": "Convert Mask to Image"
+    }
+  },
+  "82": {
+    "inputs": {
+      "expand": -18,
+      "incremental_expandrate": 0,
+      "tapered_corners": false,
+      "flip_input": false,
+      "blur_radius": 3,
+      "lerp_alpha": 1,
+      "decay_factor": 1,
+      "mask": [
+        "84",
+        0
+      ]
+    },
+    "class_type": "GrowMaskWithBlur",
+    "_meta": {
+      "title": "Уменьшение зоны волос для захвата без одежды"
+    }
+  },
+  "84": {
+    "inputs": {
+      "text": "hair",
+      "blur": 1.1,
+      "threshold": 0.35000000000000003,
+      "dilation_factor": 4,
+      "image": [
+        "29",
+        0
+      ]
+    },
+    "class_type": "CLIPSeg",
+    "_meta": {
+      "title": "CLIPSeg"
+    }
+  },
+  "88": {
+    "inputs": {
+      "prompt": "person",
+      "threshold": 0.3,
+      "sam_model": [
+        "19",
+        0
+      ],
+      "grounding_dino_model": [
+        "20",
+        0
+      ],
+      "image": [
+        "29",
+        0
+      ]
+    },
+    "class_type": "GroundingDinoSAMSegment (segment anything)",
+    "_meta": {
+      "title": "GroundingDinoSAMSegment (segment anything)"
+    }
+  },
+  "103": {
+    "inputs": {
+      "mask": [
+        "278",
+        0
+      ]
+    },
+    "class_type": "MaskToImage",
+    "_meta": {
+      "title": "Convert Mask to Image"
+    }
+  },
+  "104": {
+    "inputs": {
+      "upscale_method": "nearest-exact",
+      "width": [
+        "33",
+        0
+      ],
+      "height": [
+        "33",
+        1
+      ],
+      "crop": "disabled",
+      "image": [
+        "103",
+        0
+      ]
+    },
+    "class_type": "ImageScale",
+    "_meta": {
+      "title": "Upscale Image"
+    }
+  },
+  "113": {
+    "inputs": {
+      "mask": [
+        "82",
+        0
+      ]
+    },
+    "class_type": "MaskToImage",
+    "_meta": {
+      "title": "Convert Mask to Image"
+    }
+  },
+  "114": {
+    "inputs": {
+      "upscale_method": "nearest-exact",
+      "width": [
+        "33",
+        0
+      ],
+      "height": [
+        "33",
+        1
+      ],
+      "crop": "disabled",
+      "image": [
+        "113",
+        0
+      ]
+    },
+    "class_type": "ImageScale",
+    "_meta": {
+      "title": "Upscale Image"
+    }
+  },
+  "115": {
+    "inputs": {
+      "channel": "red",
+      "image": [
+        "114",
+        0
+      ]
+    },
+    "class_type": "ImageToMask",
+    "_meta": {
+      "title": "Апскейл в размер отрисованного"
+    }
+  },
+  "118": {
+    "inputs": {
+      "channel": "red",
+      "image": [
+        "104",
+        0
+      ]
+    },
+    "class_type": "ImageToMask",
+    "_meta": {
+      "title": "Convert Image to Mask"
+    }
+  },
+  "123": {
+    "inputs": {
+      "mask": [
+        "457",
+        0
+      ]
+    },
+    "class_type": "MaskToImage",
+    "_meta": {
+      "title": "Convert Mask to Image"
+    }
+  },
+  "124": {
+    "inputs": {
+      "upscale_method": "nearest-exact",
+      "width": [
+        "33",
+        0
+      ],
+      "height": [
+        "33",
+        1
+      ],
+      "crop": "disabled",
+      "image": [
+        "123",
+        0
+      ]
+    },
+    "class_type": "ImageScale",
+    "_meta": {
+      "title": "Upscale Image"
+    }
+  },
+  "125": {
+    "inputs": {
+      "channel": "red",
+      "image": [
+        "124",
+        0
+      ]
+    },
+    "class_type": "ImageToMask",
+    "_meta": {
+      "title": "Convert Image to Mask"
+    }
+  },
+  "187": {
+    "inputs": {
+      "mask": [
+        "69",
+        0
+      ]
+    },
+    "class_type": "MaskToImage",
+    "_meta": {
+      "title": "Convert Mask to Image"
+    }
+  },
+  "188": {
+    "inputs": {
+      "upscale_method": "nearest-exact",
+      "width": [
+        "33",
+        0
+      ],
+      "height": [
+        "33",
+        1
+      ],
+      "crop": "disabled",
+      "image": [
+        "187",
+        0
+      ]
+    },
+    "class_type": "ImageScale",
+    "_meta": {
+      "title": "Upscale Image"
+    }
+  },
+  "189": {
+    "inputs": {
+      "channel": "red",
+      "image": [
+        "188",
+        0
+      ]
+    },
+    "class_type": "ImageToMask",
+    "_meta": {
+      "title": "Апскейл в размер отрисованного"
+    }
+  },
+  "196": {
+    "inputs": {
+      "x": 0,
+      "y": 0,
+      "operation": "add",
+      "destination": [
+        "118",
+        0
+      ],
+      "source": [
+        "494",
+        0
+      ]
+    },
+    "class_type": "MaskComposite",
+    "_meta": {
+      "title": "MaskComposite"
+    }
+  },
+  "199": {
+    "inputs": {
+      "mask": [
+        "196",
+        0
+      ]
+    },
+    "class_type": "MaskToImage",
+    "_meta": {
+      "title": "Convert Mask to Image"
+    }
+  },
+  "211": {
+    "inputs": {
+      "upscale_method": "nearest-exact",
+      "width": [
+        "33",
+        0
+      ],
+      "height": [
+        "33",
+        1
+      ],
+      "crop": "disabled",
+      "image": [
+        "81",
+        0
+      ]
+    },
+    "class_type": "ImageScale",
+    "_meta": {
+      "title": "Апскейл рук в размер отрисованного"
+    }
+  },
+  "212": {
+    "inputs": {
+      "channel": "red",
+      "image": [
+        "211",
+        0
+      ]
+    },
+    "class_type": "ImageToMask",
+    "_meta": {
+      "title": "Convert Image to Mask"
+    }
+  },
+  "217": {
+    "inputs": {
+      "expand": 40,
+      "incremental_expandrate": 0,
+      "tapered_corners": true,
+      "flip_input": false,
+      "blur_radius": 0,
+      "lerp_alpha": 1,
+      "decay_factor": 1,
+      "mask": [
+        "189",
+        0
+      ]
+    },
+    "class_type": "GrowMaskWithBlur",
+    "_meta": {
+      "title": "GrowMaskWithBlur"
+    }
+  },
+  "227": {
+    "inputs": {
+      "upscale_method": "nearest-exact",
+      "megapixels": [
+        "488",
+        0
+      ],
+      "image": [
+        "408",
+        0
+      ]
+    },
+    "class_type": "ImageScaleToTotalPixels",
+    "_meta": {
+      "title": "ImageScaleToTotalPixels"
+    }
+  },
+  "229": {
+    "inputs": {
+      "expand": 3,
+      "incremental_expandrate": 0,
+      "tapered_corners": true,
+      "flip_input": false,
+      "blur_radius": 4,
+      "lerp_alpha": 1,
+      "decay_factor": 1,
+      "mask": [
+        "407",
+        0
+      ]
+    },
+    "class_type": "GrowMaskWithBlur",
+    "_meta": {
+      "title": "GrowMaskWithBlur"
+    }
+  },
+  "232": {
+    "inputs": {
+      "mask": [
+        "485",
+        0
+      ]
+    },
+    "class_type": "MaskToImage",
+    "_meta": {
+      "title": "Convert Mask to Image"
+    }
+  },
+  "233": {
+    "inputs": {
+      "ipadapter_file": "ip-adapter_sd15.bin"
+    },
+    "class_type": "IPAdapterModelLoader",
+    "_meta": {
+      "title": "Load IPAdapter Model"
+    }
+  },
+  "234": {
+    "inputs": {
+      "clip_name": "clip_vision-h_sd15.safetensors"
+    },
+    "class_type": "CLIPVisionLoader",
+    "_meta": {
+      "title": "Load CLIP Vision"
+    }
+  },
+  "236": {
+    "inputs": {
+      "interpolation": "LANCZOS",
+      "crop_position": "center",
+      "sharpening": 0,
+      "image": [
+        "381",
+        0
+      ]
+    },
+    "class_type": "PrepImageForClipVision",
+    "_meta": {
+      "title": "Prepare Image For Clip Vision"
+    }
+  },
+  "237": {
+    "inputs": {
+      "image": "sparkly (3).png",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "240": {
+    "inputs": {
+      "interpolation": "LANCZOS",
+      "crop_position": "center",
+      "sharpening": 0,
+      "image": [
+        "364",
+        0
+      ]
+    },
+    "class_type": "PrepImageForClipVision",
+    "_meta": {
+      "title": "Prepare Image For Clip Vision"
+    }
+  },
+  "247": {
+    "inputs": {
+      "image": "sparkly (4).png",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "267": {
+    "inputs": {
+      "model_name": "sam_vit_b_01ec64.pth",
+      "device_mode": "AUTO"
+    },
+    "class_type": "SAMLoader",
+    "_meta": {
+      "title": "SAMLoader (Impact)"
+    }
+  },
+  "275": {
+    "inputs": {
+      "resolution": 384,
+      "image": [
+        "8",
+        0
+      ]
+    },
+    "class_type": "OneFormer-COCO-SemSegPreprocessor",
+    "_meta": {
+      "title": "OneFormer COCO Segmentor"
+    }
+  },
+  "278": {
+    "inputs": {
+      "invert": false,
+      "red": 220,
+      "green": 20,
+      "blue": 60,
+      "threshold": 5,
+      "images": [
+        "275",
+        0
+      ]
+    },
+    "class_type": "ColorToMask",
+    "_meta": {
+      "title": "ColorToMask"
+    }
+  },
+  "281": {
+    "inputs": {
+      "resolution": 640,
+      "image": [
+        "32",
+        0
+      ]
+    },
+    "class_type": "OneFormer-COCO-SemSegPreprocessor",
+    "_meta": {
+      "title": "OneFormer COCO Segmentor"
+    }
+  },
+  "282": {
+    "inputs": {
+      "invert": false,
+      "red": 219,
+      "green": 142,
+      "blue": 185,
+      "threshold": 4,
+      "images": [
+        "281",
+        0
+      ]
+    },
+    "class_type": "ColorToMask",
+    "_meta": {
+      "title": "ColorToMask"
+    }
+  },
+  "283": {
+    "inputs": {
+      "mask": [
+        "282",
+        0
+      ]
+    },
+    "class_type": "MaskToImage",
+    "_meta": {
+      "title": "Convert Mask to Image"
+    }
+  },
+  "285": {
+    "inputs": {
+      "channel": "red",
+      "image": [
+        "286",
+        0
+      ]
+    },
+    "class_type": "ImageToMask",
+    "_meta": {
+      "title": "Convert Image to Mask"
+    }
+  },
+  "286": {
+    "inputs": {
+      "upscale_method": "nearest-exact",
+      "width": [
+        "33",
+        0
+      ],
+      "height": [
+        "33",
+        1
+      ],
+      "crop": "disabled",
+      "image": [
+        "283",
+        0
+      ]
+    },
+    "class_type": "ImageScale",
+    "_meta": {
+      "title": "Upscale Image"
+    }
+  },
+  "290": {
+    "inputs": {
+      "expand": 0,
+      "incremental_expandrate": 0,
+      "tapered_corners": true,
+      "flip_input": false,
+      "blur_radius": 2,
+      "lerp_alpha": 1,
+      "decay_factor": 1,
+      "mask": [
+        "39",
+        0
+      ]
+    },
+    "class_type": "GrowMaskWithBlur",
+    "_meta": {
+      "title": "GrowMaskWithBlur"
+    }
+  },
+  "307": {
+    "inputs": {
+      "x": 0,
+      "y": 0,
+      "operation": "add",
+      "destination": [
+        "324",
+        0
+      ],
+      "source": [
+        "189",
+        0
+      ]
+    },
+    "class_type": "MaskComposite",
+    "_meta": {
+      "title": "MaskComposite"
+    }
+  },
+  "310": {
+    "inputs": {
+      "x": 0,
+      "y": 0,
+      "operation": "xor",
+      "destination": [
+        "321",
+        0
+      ],
+      "source": [
+        "290",
+        0
+      ]
+    },
+    "class_type": "MaskComposite",
+    "_meta": {
+      "title": "MaskComposite"
+    }
+  },
+  "314": {
+    "inputs": {
+      "expand": 4,
+      "incremental_expandrate": 0,
+      "tapered_corners": true,
+      "flip_input": false,
+      "blur_radius": 0.30000000000000004,
+      "lerp_alpha": 1,
+      "decay_factor": 1,
+      "mask": [
+        "285",
+        0
+      ]
+    },
+    "class_type": "GrowMaskWithBlur",
+    "_meta": {
+      "title": "GrowMaskWithBlur"
+    }
+  },
+  "321": {
+    "inputs": {
+      "expand": 19,
+      "tapered_corners": true,
+      "mask": [
+        "307",
+        0
+      ]
+    },
+    "class_type": "GrowMask",
+    "_meta": {
+      "title": "GrowMask"
+    }
+  },
+  "324": {
+    "inputs": {
+      "x": 0,
+      "y": 0,
+      "operation": "and",
+      "destination": [
+        "115",
+        0
+      ],
+      "source": [
+        "217",
+        0
+      ]
+    },
+    "class_type": "MaskComposite",
+    "_meta": {
+      "title": "Composite"
+    }
+  },
+  "364": {
+    "inputs": {
+      "image1": [
+        "247",
+        0
+      ],
+      "image2": [
+        "365",
+        0
+      ]
+    },
+    "class_type": "ImageBatch",
+    "_meta": {
+      "title": "Batch Images"
+    }
+  },
+  "365": {
+    "inputs": {
+      "image": "sparkly (5).png",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "366": {
+    "inputs": {
+      "image1": [
+        "237",
+        0
+      ],
+      "image2": [
+        "367",
+        0
+      ]
+    },
+    "class_type": "ImageBatch",
+    "_meta": {
+      "title": "Batch Images"
+    }
+  },
+  "367": {
+    "inputs": {
+      "image": "sparkly (1).png",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "381": {
+    "inputs": {
+      "image1": [
+        "366",
+        0
+      ],
+      "image2": [
+        "364",
+        0
+      ]
+    },
+    "class_type": "ImageBatch",
+    "_meta": {
+      "title": "Batch Images"
+    }
+  },
+  "382": {
+    "inputs": {
+      "category_filter": "All",
+      "lora_name": "30sparklystyleOUT_1-000001.safetensors",
+      "strength_model": 1,
+      "strength_clip": 1,
+      "inverse": false,
+      "seed": 337848705857041,
+      "A": 4,
+      "B": 1,
+      "preset": "SD-ALL:1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1",
+      "block_vector": "1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1",
+      "bypass": false,
+      "model": [
+        "4",
+        0
+      ],
+      "clip": [
+        "4",
+        1
+      ]
+    },
+    "class_type": "LoraLoaderBlockWeight //Inspire",
+    "_meta": {
+      "title": "Lora Loader (Block Weight)"
+    }
+  },
+  "383": {
+    "inputs": {
+      "b1": 1.05,
+      "b2": 1.05,
+      "s1": 0.5,
+      "s2": 0.2,
+      "model": [
+        "382",
+        0
+      ]
+    },
+    "class_type": "FreeU",
+    "_meta": {
+      "title": "FreeU"
+    }
+  },
+  "407": {
+    "inputs": {
+      "mask": [
+        "421",
+        0
+      ]
+    },
+    "class_type": "RoundMask",
+    "_meta": {
+      "title": "RoundMask"
+    }
+  },
+  "408": {
+    "inputs": {
+      "image": "${upload_video_name}",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "409": {
+    "inputs": {
+      "x": 0,
+      "y": 0,
+      "operation": "subtract",
+      "destination": [
+        "196",
+        0
+      ],
+      "source": [
+        "450",
+        0
+      ]
+    },
+    "class_type": "MaskComposite",
+    "_meta": {
+      "title": "MaskComposite"
+    }
+  },
+  "410": {
+    "inputs": {
+      "x": 0,
+      "y": 0,
+      "operation": "subtract",
+      "destination": [
+        "409",
+        0
+      ],
+      "source": [
+        "450",
+        0
+      ]
+    },
+    "class_type": "MaskComposite",
+    "_meta": {
+      "title": "MaskComposite"
+    }
+  },
+  "415": {
+    "inputs": {
+      "x": 0,
+      "y": 0,
+      "operation": "subtract",
+      "destination": [
+        "410",
+        0
+      ],
+      "source": [
+        "189",
+        0
+      ]
+    },
+    "class_type": "MaskComposite",
+    "_meta": {
+      "title": "MaskComposite"
+    }
+  },
+  "417": {
+    "inputs": {
+      "x": 0,
+      "y": 0,
+      "operation": "subtract",
+      "destination": [
+        "415",
+        0
+      ],
+      "source": [
+        "212",
+        0
+      ]
+    },
+    "class_type": "MaskComposite",
+    "_meta": {
+      "title": "MaskComposite"
+    }
+  },
+  "421": {
+    "inputs": {
+      "x": 0,
+      "y": 0,
+      "operation": "subtract",
+      "destination": [
+        "417",
+        0
+      ],
+      "source": [
+        "314",
+        0
+      ]
+    },
+    "class_type": "MaskComposite",
+    "_meta": {
+      "title": "MaskComposite"
+    }
+  },
+  "441": {
+    "inputs": {
+      "detection_hint": "center-1",
+      "dilation": -5,
+      "threshold": 1,
+      "bbox_expansion": 0,
+      "mask_hint_threshold": 0.7,
+      "mask_hint_use_negative": "False",
+      "sam_model": [
+        "267",
+        0
+      ],
+      "segs": [
+        "73",
+        0
+      ],
+      "image": [
+        "29",
+        0
+      ]
+    },
+    "class_type": "SAMDetectorCombined",
+    "_meta": {
+      "title": "SAMDetector (combined)"
+    }
+  },
+  "450": {
+    "inputs": {
+      "mask": [
+        "324",
+        0
+      ]
+    },
+    "class_type": "RoundMask",
+    "_meta": {
+      "title": "RoundMask"
+    }
+  },
+  "453": {
+    "inputs": {
+      "combined": true,
+      "crop_factor": 3,
+      "bbox_fill": false,
+      "drop_size": 10,
+      "contour_fill": false,
+      "mask": [
+        "88",
+        1
+      ]
+    },
+    "class_type": "MaskToSEGS",
+    "_meta": {
+      "title": "MASK to SEGS"
+    }
+  },
+  "457": {
+    "inputs": {
+      "detection_hint": "mask-points",
+      "dilation": 0,
+      "threshold": 0.93,
+      "bbox_expansion": 0,
+      "mask_hint_threshold": 0.7,
+      "mask_hint_use_negative": "False",
+      "sam_model": [
+        "267",
+        0
+      ],
+      "segs": [
+        "453",
+        0
+      ],
+      "image": [
+        "29",
+        0
+      ]
+    },
+    "class_type": "SAMDetectorCombined",
+    "_meta": {
+      "title": "SAMDetector (combined)"
+    }
+  },
+  "463": {
+    "inputs": {
+      "blend_percentage": 1,
+      "image_a": [
+        "477",
+        0
+      ],
+      "image_b": [
+        "466",
+        0
+      ],
+      "mask": [
+        "232",
+        0
+      ]
+    },
+    "class_type": "Image Blend by Mask",
+    "_meta": {
+      "title": "Image Blend by Mask"
+    }
+  },
+  "465": {
+    "inputs": {
+      "add_noise": "enable",
+      "noise_seed": [
+        "496",
+        0
+      ],
+      "steps": 25,
+      "cfg": 6,
+      "sampler_name": "ddpm",
+      "scheduler": "karras",
+      "start_at_step": 1,
+      "end_at_step": 10000,
+      "return_with_leftover_noise": "disable",
+      "model": [
+        "383",
+        0
+      ],
+      "positive": [
+        "467",
+        0
+      ],
+      "negative": [
+        "467",
+        1
+      ],
+      "latent_image": [
+        "467",
+        2
+      ]
+    },
+    "class_type": "KSamplerAdvanced",
+    "_meta": {
+      "title": "KSampler (Advanced)"
+    }
+  },
+  "466": {
+    "inputs": {
+      "samples": [
+        "465",
+        0
+      ],
+      "vae": [
+        "31",
+        0
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "467": {
+    "inputs": {
+      "positive": [
+        "17",
+        0
+      ],
+      "negative": [
+        "17",
+        1
+      ],
+      "vae": [
+        "31",
+        0
+      ],
+      "pixels": [
+        "32",
+        0
+      ],
+      "mask": [
+        "468",
+        0
+      ]
+    },
+    "class_type": "InpaintModelConditioning",
+    "_meta": {
+      "title": "InpaintModelConditioning"
+    }
+  },
+  "468": {
+    "inputs": {
+      "mask": [
+        "485",
+        0
+      ]
+    },
+    "class_type": "RoundMask",
+    "_meta": {
+      "title": "RoundMask"
+    }
+  },
+  "476": {
+    "inputs": {
+      "image": [
+        "8",
+        0
+      ]
+    },
+    "class_type": "Get image size",
+    "_meta": {
+      "title": "Get original size "
+    }
+  },
+  "477": {
+    "inputs": {
+      "upscale_method": "nearest-exact",
+      "width": [
+        "476",
+        0
+      ],
+      "height": [
+        "476",
+        1
+      ],
+      "crop": "disabled",
+      "image": [
+        "408",
+        0
+      ]
+    },
+    "class_type": "ImageScale",
+    "_meta": {
+      "title": "Upscale Image"
+    }
+  },
+  "479": {
+    "inputs": {
+      "upscale_method": "nearest-exact",
+      "width": [
+        "476",
+        0
+      ],
+      "height": [
+        "476",
+        1
+      ],
+      "crop": "disabled",
+      "image": [
+        "480",
+        0
+      ]
+    },
+    "class_type": "ImageScale",
+    "_meta": {
+      "title": "Upscale Image"
+    }
+  },
+  "480": {
+    "inputs": {
+      "mask": [
+        "229",
+        0
+      ]
+    },
+    "class_type": "MaskToImage",
+    "_meta": {
+      "title": "Convert Mask to Image"
+    }
+  },
+  "485": {
+    "inputs": {
+      "channel": "red",
+      "image": [
+        "479",
+        0
+      ]
+    },
+    "class_type": "ImageToMask",
+    "_meta": {
+      "title": "Convert Image to Mask"
+    }
+  },
+  "488": {
+    "inputs": {
+      "Value": 0.43
+    },
+    "class_type": "Float",
+    "_meta": {
+      "title": "Float"
+    }
+  },
+  "494": {
+    "inputs": {
+      "expand": 11,
+      "tapered_corners": true,
+      "mask": [
+        "125",
+        0
+      ]
+    },
+    "class_type": "GrowMask",
+    "_meta": {
+      "title": "GrowMask"
+    }
+  },
+  "495": {
+    "inputs": {
+      "filename_prefix": "${download_video_name}",
+      "images": [
+        "499",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save Image"
+    }
+  },
+  "496": {
+    "inputs": {
+      "min": 0,
+      "max": 1000000
+    },
+    "class_type": "RandomInt",
+    "_meta": {
+      "title": "Random Int"
+    }
+  },
+  "497": {
+    "inputs": {
+      "min": 0,
+      "max": 1000000
+    },
+    "class_type": "RandomInt",
+    "_meta": {
+      "title": "Random Int"
+    }
+  },
+  "498": {
+    "inputs": {
+      "image": [
+        "408",
+        0
+      ]
+    },
+    "class_type": "Get Image Size",
+    "_meta": {
+      "title": "Get Image Size"
+    }
+  },
+  "499": {
+    "inputs": {
+      "upscale_method": "nearest-exact",
+      "width": [
+        "498",
+        0
+      ],
+      "height": [
+        "498",
+        1
+      ],
+      "crop": "disabled",
+      "image": [
+        "463",
+        0
+      ]
+    },
+    "class_type": "ImageScale",
+    "_meta": {
+      "title": "Upscale Image"
+    }
+  }
+}

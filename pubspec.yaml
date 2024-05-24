@@ -38,6 +38,7 @@ dependency_overrides:
 flutter:
   assets:
     - assets/test_image.jpg
+    - assets/Clothing_Sparkle_V1_prod_raw-API.json
 
   # To add assets to your package, add an assets section, like this:
   # assets:
