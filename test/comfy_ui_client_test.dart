@@ -21,12 +21,19 @@ void main() async {
 
   await client.connect();
 
+  final bytes = await rootBundle.load('assets/test_image.jpg');
+  final imageResult = await client.uploadImage(
+    bytes.buffer.asUint8List(),
+    "test_image.jpg",
+    overwrite: true,
+  );
+
   final inputs = jsonDecode(
     await rootBundle.loadString('assets/Clothing_Sparkle_V1_prod_raw-API.json'),
   ) as Map<String, dynamic>;
 
-  inputs["408"]["inputs"]["image"] = "test_image.jpg";
-  inputs["495"]["inputs"]["filename_prefix"] = "test_image_output.jpg";
+  inputs["408"]["inputs"]["image"] = imageResult.name;
+  inputs["495"]["inputs"]["filename_prefix"] = '${imageResult.name}output';
 
   final result = await client.getImages(Prompt(inputs: inputs));
   await client.disconnect();

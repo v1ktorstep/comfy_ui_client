@@ -125,10 +125,10 @@ class ComfyUiClient {
     String filename, {
     bool? overwrite,
   }) async {
-    final formData = {
+    final formData = FormData.fromMap({
       'image': MultipartFile.fromBytes(image, filename: filename),
       if (overwrite != null) 'overwrite': overwrite.toString(),
-    };
+    });
 
     final res = await dio.postUri(
       Uri.parse('http://$serverAddress/upload/image'),
